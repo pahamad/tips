@@ -1,0 +1,81 @@
+﻿  <div class="alert alert-light">
+    <p class="alert alert-warning"><b>Note:</b> Code tested on .Net Core 2.2</p>
+    <dl class="dl-horizontal">
+      <dt>Step:1</dt>
+      <dd>Create a folder under "wwwroot", let's <u>FileUploadTips</u></dd>
+      <dt>Step:2</dt>
+      <dd>
+        <pre class="text-black-50">          public class FileUploadTipsController : Controller
+          {
+            private IHostingEnvironment _hostingEnvironment;
+            public FileUploadTipsController(IHostingEnvironment hostingEnvironment)
+            {
+              _hostingEnvironment = hostingEnvironment;
+            }
+            ....
+          </pre>
+      </dd>
+      <dt>Step:3</dt>
+      <dd>
+        //Create/Extend your model with file properties<br />
+        //Here supposed upload two file, passport copy and driving license copy
+        <pre>          
+          public class FileUploadTipsModel
+          {
+            [Required(ErrorMessage ="Please enter name")]
+            public string Name { get; set; }
+
+            [Required(ErrorMessage = "Please upload passport file")]
+            [Display(Name = "Passport")]
+            public IFormFile PassportFile { get; set; }
+
+            [Required(ErrorMessage = "Please upload DL file")]
+            [Display(Name = "Driving License")]
+            public IFormFile DrivingLicenceFile { get; set; }
+          }
+          </pre>
+      </dd>
+      <dt>Step:4</dt>
+      <dd>
+        //Make sure on View your form tag should allow to post file
+        <pre>          &lt;form method="post" enctype="multipart/form-data"&gt;
+
+          &lt;input type="file" class="" asp-for="PassportFile"&gt;
+          &lt;input type="file" class="" asp-for="DrivingLicenceFile"&gt;
+          </pre>
+      </dd>
+      <dt>Step:5</dt>
+      <dd>
+        //Under your post action method, Save both posted files under created folder
+        <pre>          string webRootPath = _hostingEnvironment.WebRootPath;
+          string newPath = Path.Combine(webRootPath, "FileUploadTps");
+          if (!Directory.Exists(newPath))
+          {
+            Directory.CreateDirectory(newPath);
+          }
+
+          //First file
+          string fileName = ContentDispositionHeaderValue
+                            .Parse(model.PassportFile.ContentDisposition)
+                            .FileName.Trim('"');
+
+          string fullPath = Path.Combine(newPath, fileName);
+          using (var stream = new FileStream(fullPath, FileMode.Create))
+          {
+            model.PassportFile.CopyTo(stream);
+          }
+
+          //Second File
+          fileName = ContentDispositionHeaderValue
+                      .Parse(model.DrivingLicenceFile.ContentDisposition)
+                      .FileName.Trim('"');
+
+          fullPath = Path.Combine(newPath, fileName);
+          using (var stream = new FileStream(fullPath, FileMode.Create))
+          {
+            model.DrivingLicenceFile.CopyTo(stream);
+          }
+          </pre>
+      </dd>
+    </dl>
+  </div>

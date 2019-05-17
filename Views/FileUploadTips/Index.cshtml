@@ -1,0 +1,38 @@
+﻿@model Tipstrics.Controllers.FileUploadTipsModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h4>Best way to Upload Files on .Net Core Web</h4>
+<hr />
+<div class="row">
+  <div class="col-3">
+    <form method="post" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="Name"></label>
+        <input type="text" asp-for="Name" class="form-control" >
+        <span class="text-danger" asp-validation-for="Name"></span>
+      </div>
+      <div class="form-group">
+        <label for="PassportFile">Passport</label>
+        <input type="file" name="PassportFile">
+        <span class="text-danger" asp-validation-for="DrivingLicenceFile"></span>
+      </div>
+      <div class="form-group">
+        <label for="DrivingLicenceFile">Driving License</label>
+        <input type="file" name="DrivingLicenceFile">
+        <span class="text-danger" asp-validation-for="DrivingLicenceFile" ></span>
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn btn-success">Submit</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="col-9">
+    <partial name="_readme" />
+  </div>
+
+</div>
+

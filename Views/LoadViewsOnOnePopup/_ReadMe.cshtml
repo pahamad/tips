@@ -1,0 +1,94 @@
+﻿<div class="alert alert-light">
+  <p class="alert alert-warning">
+    <b>Note:</b> Code tested on .Net Core 2.2 and used bootstrap popup but you can use any other plugins 
+  </p>
+  <dl class="dl-horizontal">
+    <dt>Step:1</dt>
+    <dd>
+      <pre>
+        <!-- Step: 1 -->
+        //Add html for popup and it should be placed on then main layout page
+        &lt;div id='parialModel' class="modal" tabindex="-1" role="dialog"
+           backdrop="static" keyboard="false">
+          &lt;div class="modal-dialog modal-lg" role="document">
+            &lt;div class="modal-content">
+              &lt;div class="modal-body" style="margin-bottom:5px;padding-bottom:0">
+                &lt;div id='paritalModelData'>
+                &lt;/div>
+              &lt;/div>
+              &lt;div class="modal-footer" style="padding:5px 5px 5px 5px">
+                &lt;button type="button" class="btn btn-success btn-xs" data-dismiss="modal"><i class="fa fa-times"></i> Close&lt;/button>
+              &lt;/div>
+            &lt;/div>
+          &lt;/div>
+        &lt;/div>
+      </pre>
+    </dd>
+    <dt>Step: 2</dt>
+    <dd>
+      <pre>
+      //Add the link on that click you want to show the view 
+      &lt;a href="javascript:;" data-url="@@Url.Action("PartialData", "LoadViewsOnOnePopup")" class="parial-model">
+            Load View
+      &lt;/a>
+      //Here set data-url, which view you want to open, set the class "partial-model"
+    </pre>
+    </dd>  
+    <dt>Step: 3</dt>
+    <dd>
+      //Write js function to bind click on event and load bootstrap model popup
+      <pre>
+        function bindPartialModelPopup() {
+          //Bind click event if element has the class "partial-model"
+          $('.parial-model').on("click", function () {
+
+            //Under the model popup you can find one div with id name as "paritialModelData". 
+            //Here we are going to load view
+            //First clear histing view data if any
+            $('#paritalModelData').html("");
+
+            //Get the action url which set on the link
+            var url = $(this).data('url');
+            
+            //show model popup
+            $('#parialModel').modal({ show: true });
+
+            //Start showing message loading...  
+            showLoading("paritalModelData");
+            
+            //Load action view data  
+            $.get(url, function (data) {
+              setTimeout(function () {
+                //hide loading message 
+                hideLoading("paritalModelData");
+
+                //Load view data
+                $('#paritalModelData').html(data);
+              }, 500)
+            });
+          });
+        }
+        
+        //Show loading message
+        function  showLoading(eleId) {
+          $("#" + eleId).html("Loading...");
+        }
+        
+        //Hide loading message
+        function hideLoading(eleId) {
+          $("#" + eleId).html("");
+        }
+
+      </pre>
+    </dd>
+    <dt>Step: 4</dt>
+    <dd>
+      //Call method to bind method to bind click and place on main layout
+      <pre>
+        $(document).ready(function () {
+          bindPartialModelPopup();
+        });
+      </pre>
+    </dd>
+  </dl>
+</div>

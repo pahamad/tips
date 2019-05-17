@@ -1,0 +1,21 @@
+﻿@model Tipstrics.Controllers.FileUploadTipsModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h4>Best way to load partial view on Model Popup. </h4>
+<hr />
+<div class="row">
+  <div class="col-2">
+    <a href="javascript:;" data-url="@Url.Action("PartialData", "LoadViewsOnOnePopup")" class="parial-model no-block" title="View">Load in Popup</a>
+  </div>
+
+  <div class="col-10">
+    <partial name="_readme" />
+  </div>
+</div>
+
+<script>
+  
+</script>
